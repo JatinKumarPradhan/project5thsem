@@ -1,0 +1,38 @@
+Sure! Let's go through the code step by step to understand what it does and how it works.
+
+The code begins by importing the necessary libraries and modules, such as re (regular expressions), os (operating system), nltk (Natural Language Toolkit), joblib (for loading/saving models), requests (for making HTTP requests), numpy (numerical computing library), BeautifulSoup (for parsing HTML), urllib (for handling URLs), matplotlib (for plotting), stopwords (for removing common words), WordCloud (for generating word clouds), and Flask (for building web applications).
+
+The code defines several functions that will be used later:
+
+The clean function takes a string x as input and performs various cleaning operations using regular expressions. It replaces non-alphabet characters with spaces, removes extra spaces, removes the text "READ MORE", converts the string to lowercase, and removes short words. Finally, it returns the cleaned string.
+The extract_all_reviews function takes a URL, along with lists to store the extracted reviews, customer names, comment headers, and ratings. It uses BeautifulSoup to parse the HTML content of the URL and extracts the relevant information. It appends the extracted reviews, customer names, comment headers, and ratings to their respective lists.
+The tokenizer function takes a string s as input, converts it to lowercase, tokenizes it into individual words, removes words with a length less than 2, and removes common stop words using the stopwords module from nltk. It returns a list of tokens.
+The tokens_2_vectors function takes a list of tokens and converts them into a vector representation. It creates an array of zeros with a length equal to the size of the word_2_int dictionary (plus one extra element for unknown words). It iterates over the tokens, checks if each token is present in the word_2_int dictionary, and increments the corresponding index in the array. Finally, it normalizes the array by dividing each element by the sum of all elements and returns the resulting vector.
+The Flask application is initialized with Flask(__name__), creating an instance of the Flask class.
+
+The code defines a route for the home page (/) that renders the home.html template. When a user accesses the home page, the template will be rendered and displayed in the user's browser.
+
+There is a route defined for the /results URL. This route is triggered when the user submits a form on the home page. The route performs the following actions:
+
+It retrieves the URL of the product page and the desired number of reviews from the submitted form.
+It uses the urlopen function from urllib to open the URL and read its content.
+It uses BeautifulSoup to parse the HTML content of the product page.
+It extracts the product name and price from the parsed HTML.
+It finds the URL for all reviews on the product page.
+It constructs the URL for the first page of reviews and assigns it to the variable url2.
+It enters a loop that repeatedly extracts reviews, customer names, comment headers, and ratings from each page of reviews. It appends the extracted information to their respective lists.
+The loop continues until the number of extracted reviews matches the desired number or until there are no more reviews to extract.
+It slices the lists of reviews, customer names, comment headers, and ratings to keep only the desired number of items.
+It prepares the data for generating a word cloud by joining all the clean reviews into a single string.
+It creates a WordCloud object, configures its appearance, generates the word cloud using the clean reviews string, and saves the resulting image as woc.png in the static/images directory.
+It performs sentiment analysis on the reviews using a pre-trained model. However, the code for loading the model and the word-to-index mapping (word_2_int) is currently commented out.
+It prepares the data for rendering the result.html template by creating a list of dictionaries, where each dictionary contains the review text, sentiment analysis result, customer name, comment header, and rating for a single review.
+It counts the number of positive and negative reviews.
+Finally, it renders the result.html template with the extracted data and sentiment analysis results.
+There is another route defined for the /wc URL. This route renders the wc.html template when accessed. This template likely contains the code for displaying the word cloud image generated in the /results route.
+
+Lastly, the code defines a CleanCache class, which is responsible for clearing any residual CSV and image files that may be present from previous searches. It checks if the specified directory is not empty, iterates over the files in the directory, and removes each file.
+
+To run this code, you need to ensure that you have the necessary dependencies installed (such as Flask, NLTK, joblib, requests, numpy, BeautifulSoup, and WordCloud) and that you have the required HTML templates (home.html, result.html, and wc.html) in the appropriate directory structure. You also need to provide the missing pre-trained models and data files (word2int.sav, sentiment.sav, and stopwords.txt) for the code to work properly.
+
+The code provides a web interface where users can enter a Flipkart product page URL and the desired number of reviews to scrape. It then extracts the reviews, performs sentiment analysis on them (currently commented out), generates a word cloud from the cleaned reviews, and displays the results to the user.
